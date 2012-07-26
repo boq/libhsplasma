@@ -23,8 +23,9 @@ static int sockError();
 #ifdef WIN32
 #   include <winsock2.h>
 #   include <ws2tcpip.h>
+#ifndef __MINGW32__
 #   include <wspiapi.h>
-
+#endif
     typedef char* sockbuf_t;
 
     static WSADATA s_wsadata;
