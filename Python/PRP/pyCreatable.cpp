@@ -108,6 +108,21 @@ static PyObject* pyCreatable_write(pyCreatable* self, PyObject* args) {
     return Py_None;
 }
 
+static PyObject* pyCreatable_writePrc(pyCreatable* self, PyObject* args) {
+   pyStream* stream;
+
+   if (!PyArg_ParseTuple(args, "O", &stream) || !pyStream_Check((PyObject*)stream)) {
+       PyErr_SetString(PyExc_TypeError, "write expects hsStream");
+       return NULL;
+   }
+
+   pfPrcHelper prc(stream->fThis);
+   self->fThis->prcWrite(&prc);
+
+   Py_INCREF(Py_None);
+   return Py_None;
+}
+
 static PyMethodDef pyCreatable_Methods[] = {
     { "ClassIndex", (PyCFunction)pyCreatable_ClassIndex, METH_NOARGS,
       "Returns the Creatable Class Index of this Creatable" },
@@ -127,6 +142,9 @@ static PyMethodDef pyCreatable_Methods[] = {
       "Params: stream, resManager\n"
       "Read this Creatable from `stream`" },
     { "write", (PyCFunction)pyCreatable_write, METH_VARARGS,
+      "Params: stream, resManager\n"
+      "Write this Creatable to `stream`" },
+    { "writePrc", (PyCFunction)pyCreatable_writePrc, METH_VARARGS,
       "Params: stream, resManager\n"
       "Write this Creatable to `stream`" },
     { NULL, NULL, 0, NULL }
